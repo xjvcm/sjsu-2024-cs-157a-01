@@ -1,0 +1,92 @@
+---
+title: Assignment 01
+---
+
+
+
+
+
+
+flowchart LR
+    user[User] --- user-id([user_id])
+    user --- user-first-name([first_name])
+    user --- user-last-name([last_name])
+    user --- user-gender([gender])
+    user --- user-birthdate([birthdate])
+    user --- user-birthplace([birthplace])
+    user --- user-age([age])
+    user --- user-email([email])
+    user --- user-photo([Profile Picture])
+    user --- user-friend([friend_id])
+
+    review[Review] --- review-id([review_id])
+    review --- review-publish-date([Publish Date])
+    review --- review-content([Content])
+    review --- review-author([Author])
+    review --- review-num-star(["# of Star(s)"])
+    review --- review-num-vote(["# of Vote(s)"])
+    review --- review-category([Category])
+    review --- review-comment([Comment])
+    review --- review-belongs-business{Belongs}
+        review-belongs-business --- business[Business]
+
+    business --- business-id([business_id])
+    business --- business-address([Address])
+        business-address --- business-address-street([Street])
+        business-address --- business-address-state([State])
+        business-address --- business-address-zip([Zip Code])
+        business-address --- business-address-latitude([Latitude])
+        business-address --- business-address-longitude([Longitude])
+    business --- business-num-review(["# of Review(s)"])
+    business --- business-num-star(["# of Star(s)"])
+    business --- business-operation([Operation])
+        business-operation --- business-operation-hour(["Hour(s)"])
+            business-operation-hour --- business-operation-hour-start(["Start"])
+            business-operation-hour --- business-operation-hour-stop(["Stop"])
+        business-operation --- business-operation-day(["Day"])
+    business --- business-parking([Parking])
+    business --- business-ambient([Ambient])
+
+    business === business-category((d))
+
+    business-category --- business-category-fitness[Fitness]
+    business-category --- business-category-education[Education]
+
+    photo[Photo] --- photo-id([photo_id])
+    photo --- photo-author([Author])
+    photo --- photo-description([Description])
+    photo --- photo-location([Location])
+    photo --- photo-like([Like])
+    photo --- photo-type((d))
+        photo-type --- photo-type-business[Business]
+            photo-type-business --- photo-type-business-belongs-business{Belongs}
+                photo-type-business-belongs-business --- business
+        photo-type --- photo-type-user[Personal]
+            photo-type-user --- photo-type-user-belongs-user{Belongs}
+                photo-type-user-belongs-user --- user
+
+    check-in[Check-In] --- check-in-id([check_in_id])
+    check-in --- check-in-info([Info])
+    check-in --- check-in-belongs-business{Belongs}
+        check-in-belongs-business --- business
+
+    classDef strong-entity-primary-key text-decoration:underline,text-decoration-style:solid,text-decoration-thickness:4px
+    class user-id,review-id,business-id strong-entity-primary-key
+
+%%    classDef weak-entity stroke-width:7px
+%%    class  weak-entity
+
+%%    classDef weak-entity-primary-key text-decoration:underline,text-decoration-style:dotted,text-decoration-thickness:4px
+%%    class  weak-entity-primary-key
+
+    classDef identifying-relationship stroke-width:7px
+    class compliment identifying-relationship
+
+%%    Total Participation
+%%    linkStyle  stroke-width:7px
+
+    classDef multivalued-attribute stroke-width:7px
+    class user-friend,review-comment,business-operation,photo-like multivalued-attribute
+
+    classDef derived-attribute stroke-dasharray:3
+    class age derived-attribute

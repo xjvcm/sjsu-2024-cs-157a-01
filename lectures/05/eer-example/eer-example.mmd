@@ -1,0 +1,85 @@
+---
+title: (E)ER-Exmaple
+---
+
+
+
+
+
+
+flowchart LR
+    privacy-level-set([Privacy Level]) --- set[Set]
+    description-set([Description]) --- set
+    creation-date([Creation Date]) --- set
+    set === belongs{Belongs}
+    belongs --- photo[Photo]
+    photo --- category([Category])
+    photo --- photo-id([id])
+    photo --- time-photo([time])
+    photo --- location([Location])
+        location --- x([x])
+        location --- y([y])
+    photo --- tags([tags])
+    photo --- description-photo([Description])
+    photo --- privacy-level-photo([Privacy Level])
+    photo ==> publish{Publish}
+    photo ==> capture{Capture}
+        capture --- camera([Camera])
+            camera --- camera-id([id])
+            camera --- brand([Brand])
+            camera --- model([Model])
+    photo --- comment{Comment}
+        comment --- time-comment([time])
+        comment --- desc([desc])
+    comment --- user([User])
+    photo --- favorite{Favorite}
+    favorite --- user
+    publish --- user
+    user --- user-id([id])
+    user --- name([name])
+    user --- dob([DOB])
+    user --- contact([contact])
+        contact --- email([email])
+        contact --- phone([phone])
+    user --- age([age])
+    user --- friend{friend}
+    friend --- user
+    user === disjoint-user([d])
+        disjoint-user --- guest[guest]
+            guest --- exp-date([exp. date])
+        disjoint-user --- member[member]
+            member === disjoint-member[d]
+                disjoint-member --- basic[Basic]
+                    basic --- max-num-photos([Max # of photos])
+                    basic --- max-space([Max Space])
+                disjoint-member --- pro[Pro]
+                    pro --- annual-fee([Annual fee])
+    user --> surf{Surf}
+    session[Session] === surf
+    session --- duration([duration])
+    session --- e_time([e_time])
+    session --- s_time([s_time])
+    session --- session-id([id])
+
+
+
+    classDef strong-entity-primary-key text-decoration:underline,text-decoration-style:solid,text-decoration-thickness:4px
+    class photo-id,camera-id,user-id strong-entityprimary-key
+
+    classDef weak-entity stroke-width:7px
+    class session weak-entity
+
+    classDef weak-entity-primary-key text-decoration:underline,text-decoration-style:dotted,text-decoration-thickness:4px
+    class session-id weak-entity-primary-key
+
+    classDef identifying-relationship stroke-width:7px
+    class surf identifying-relationship
+
+%%    Total Participation
+    linkStyle 3,14,15,36,40 stroke-width:7px
+
+    classDef multivalued-attribute stroke-width:7px
+    class tags multivalued-attribute
+
+    classDef derived-attribute stroke-dasharray:3
+    class age,duration derived-attribute

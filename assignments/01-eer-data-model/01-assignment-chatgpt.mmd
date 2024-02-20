@@ -1,0 +1,62 @@
+erDiagram
+    YelpUser ||--o{ Review : "Writes"
+    Review ||--|| Business : "ReviewOf"
+    Business ||--|| BusinessCategory : "BelongsToCategory"
+    BusinessCategory ||--o{ Subcategory : "HasSubcategory"
+    YelpUser ||--o{ CheckIn : "CheckInTo"
+    YelpUser ||--o{ Photo : "Likes"
+    Photo ||--|| Business : "PhotoOf"
+    Review ||--o{ Comment : "HasComment"
+    YelpUser }o--o{ YelpUser : "FriendOf"
+
+    YelpUser {
+        string yelpID PK
+        string firstName
+        string lastName
+        string gender
+        date birthdate
+        string birthplace
+        int age derived
+        string email multivalued
+        string profilePicture
+    }
+    Review {
+        string ReviewID PK
+        date PublishDate
+        string Content
+        int Stars
+        int TotalVotes
+        int UsefulVotes
+        int NonUsefulVotes
+    }
+    Business {
+        string BusinessID PK
+        string Address
+        int NumberOfReviews
+        float Stars
+        string ParkingType
+        string ambientType
+    }
+    BusinessCategory {
+        string CategoryID PK
+        string Name
+    }
+    Subcategory {
+        string SubcategoryID PK
+        string Name
+    }
+    Photo {
+        string PhotoID PK
+        string Description
+        string Location
+        string PhotoType
+    }
+    CheckIn {
+        string CheckInID PK
+        string CheckInInfo
+    }
+    Comment {
+        string CommentID PK
+        string TextualContent
+        date Date
+    }
