@@ -17,28 +17,33 @@ flowchart LR
     user --- user-age([age])
     user --- user-email([email])
     user --- user-photo([Profile Picture])
-    user --- user-friend([friend_id])
+    user --- user-friend([Friend])
+    user --- user-type((" "))
+        user-type --- user-type-friend[Friend]
+            user-type-friend --- user-type-friend-id([friend_id])
+
+    activity[Activity]
 
     review[Review] --- review-id([review_id])
     review --- review-publish-date([Publish Date])
     review --- review-content([Content])
     review --- review-author([Author])
-    review --- review-num-star(["# of Star(s)"])
-    review --- review-num-vote(["# of Vote(s)"])
-    review --- review-category([Category])
+    review --- review-num-star(["# of Star"])
+    review --- review-num-vote(["# of Vote"])
     review --- review-comment([Comment])
-    review --- review-belongs-business{Belongs}
-        review-belongs-business --- business[Business]
+    review --- review-vote([Vote])
+        review-vote --- review-vote-category([Category])
+        review-vote --- review-vote-user([User])
 
-    business --- business-id([business_id])
+    business[Business] --- business-id([business_id])
     business --- business-address([Address])
         business-address --- business-address-street([Street])
         business-address --- business-address-state([State])
         business-address --- business-address-zip([Zip Code])
         business-address --- business-address-latitude([Latitude])
         business-address --- business-address-longitude([Longitude])
-    business --- business-num-review(["# of Review(s)"])
-    business --- business-num-star(["# of Star(s)"])
+    business --- business-num-review(["# of Review"])
+    business --- business-num-star(["# of Star"])
     business --- business-operation([Operation])
         business-operation --- business-operation-hour(["Hour(s)"])
             business-operation-hour --- business-operation-hour-start(["Start"])
@@ -46,11 +51,30 @@ flowchart LR
         business-operation --- business-operation-day(["Day"])
     business --- business-parking([Parking])
     business --- business-ambient([Ambient])
-
+    business --- business-check-in([Check-In])
     business === business-category((d))
+        business-category --- business-category-fitness[Fitness & Instruction]
+            business-category-fitness --- business-category-fitness-id([bc_fitness_id])
+            business-category-fitness --- business-category-fitness-subcategories([Subcategory])
+            business-category-fitness --- business-category-fitness-subcategories-type([o])
+                business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-active[Active Live]
+                business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-gym[Gym]
+                business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-center[Weight Lose Center]
+                business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-trainer[Trainer]
+                business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-pilate[Pilate]
+                business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-nutritionist[Nutritionist]
+        business-category --- business-category-education[Education]
+            business-category-education --- business-category-education-id([bc_education_id])
+            business-category-education --- business-category-education-subcategories([Subcategory])
+            business-category-education --- business-category-education-subcategories-type([o])
+                business-category-education-subcategories-type --- business-category-education-subcategories-type-college[College & University]
+                business-category-education-subcategories-type --- business-category-education-subcategories-type-middle-high[Middle School & High School]
+                business-category-education-subcategories-type --- business-category-education-subcategories-type-adult[Adult School]
+                business-category-education-subcategories-type --- business-category-education-subcategories-type-specialty[Specialty School]
+                business-category-education-subcategories-type --- business-category-education-subcategories-type-dance[Dance Studio]
+                business-category-education-subcategories-type --- business-category-education-subcategories-type-preschool[Preschool]
+                business-category-education-subcategories-type --- business-category-education-subcategories-type-child[Child Care & Day Care]
 
-    business-category --- business-category-fitness[Fitness]
-    business-category --- business-category-education[Education]
 
     photo[Photo] --- photo-id([photo_id])
     photo --- photo-author([Author])
@@ -58,26 +82,51 @@ flowchart LR
     photo --- photo-location([Location])
     photo --- photo-like([Like])
     photo --- photo-type((d))
-        photo-type --- photo-type-business[Business]
-            photo-type-business --- photo-type-business-belongs-business{Belongs}
-                photo-type-business-belongs-business --- business
-        photo-type --- photo-type-user[Personal]
-            photo-type-user --- photo-type-user-belongs-user{Belongs}
-                photo-type-user-belongs-user --- user
+        photo-type-- ⊂ ---photo-type-business[Business_Photo]
+        photo-type-- ⊂ ---photo-type-user[User_Photo]
 
     check-in[Check-In] --- check-in-id([check_in_id])
     check-in --- check-in-info([Info])
+
+    user --- user-complements-user{Complements}
+        user-complements-user --- user
+
+    user --- user-friends-user{Friends}
+        user-friends-user --- user
+        user-friends-user --- user-friends-user-friend-id([friend_id])
+
+    activity --- user-type-friend
+
+    user --- user-rates-business{Rates}
+        user-rates-business --- business
+        user-rates-business --- user-rates-business-rating([Rating])
+
+    user --- user-activity-wall-review{Activity Wall}
+        user-activity-wall-review --- review
+
+    user --- user-checks-in-business{Checks In}
+        user-checks-in-business --- business
+
+    review --- review-belongs-business{Belongs}
+        review-belongs-business --- business
+
+    photo-type-business --- photo-type-business-belongs-business{Belongs}
+        photo-type-business-belongs-business --- business
+
+    photo-type-user --- photo-type-user-belongs-user{Belongs}
+        photo-type-user-belongs-user --- user
+
     check-in --- check-in-belongs-business{Belongs}
         check-in-belongs-business --- business
 
     classDef strong-entity-primary-key text-decoration:underline,text-decoration-style:solid,text-decoration-thickness:4px
-    class user-id,review-id,business-id strong-entity-primary-key
+    class user-id,business-id strong-entity-primary-key
 
 %%    classDef weak-entity stroke-width:7px
 %%    class  weak-entity
 
-%%    classDef weak-entity-primary-key text-decoration:underline,text-decoration-style:dotted,text-decoration-thickness:4px
-%%    class  weak-entity-primary-key
+    classDef weak-entity-primary-key text-decoration:underline,text-decoration-style:dotted,text-decoration-thickness:4px
+    class user-type-friend-id,review-id,business-category-fitness-id,business-category-education-id,photo-id weak-entity-primary-key
 
     classDef identifying-relationship stroke-width:7px
     class compliment identifying-relationship
@@ -86,7 +135,7 @@ flowchart LR
 %%    linkStyle  stroke-width:7px
 
     classDef multivalued-attribute stroke-width:7px
-    class user-friend,review-comment,business-operation,photo-like multivalued-attribute
+    class user-friend,review-vote-user,review-comment,business-operation,business-check-in,photo-like multivalued-attribute
 
     classDef derived-attribute stroke-dasharray:3
     class age derived-attribute
