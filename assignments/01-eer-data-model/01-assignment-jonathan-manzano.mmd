@@ -6,13 +6,13 @@ format:
   html: default
   pdf: default
 ---
-%%%%{
-%%  init: {
-%%    "flowchart": {
-%%      "defaultRenderer": "elk"
-%%    }
-%%  }
-%%}%%
+%% %%{
+%%   init: {
+%%     "flowchart": {
+%%       "defaultRenderer": "elk"
+%%     }
+%%   }
+%% }%%
 flowchart LR
     user[User] --- user-id([user_id])
     user --- user-first-name([first_name])
@@ -24,7 +24,7 @@ flowchart LR
     user --- user-email([email])
     user --- user-photo([Profile Picture])
     user --- user-friend([Friend])
-    user --- user-type-subset-friend(("⊂"))
+    user --- user-type-subset-friend(("⊃"))
     user-type-subset-friend --- user-type-friend[Friend]
     user-type-friend --- user-type-friend-id([friend_id])
     activity[Activity] --- activity-id([activity_id])
@@ -55,9 +55,10 @@ flowchart LR
     business --- business-parking([Parking])
     business --- business-ambient([Ambient])
     business --- business-check-in([Check-In])
-    business-rating([Rating])
-    business === business-category((d))
-    business-category --- business-category-fitness[Fitness & Instruction]
+    business --- business-rating([Rating])
+    business-category[Business Category] === business-category-type((d))
+    business-category --- business-category-id([business_category_id])
+    business-category-type --- business-category-fitness[Fitness & Instruction]
     business-category-fitness --- business-category-fitness-id([bc_fitness_id])
     business-category-fitness --- business-category-fitness-subcategories([Subcategory])
     business-category-fitness --- business-category-fitness-subcategories-type([o])
@@ -67,7 +68,7 @@ flowchart LR
     business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-trainer[Trainer]
     business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-pilate[Pilate]
     business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-nutritionist[Nutritionist]
-    business-category --- business-category-education[Education]
+    business-category-type --- business-category-education[Education]
     business-category-education --- business-category-education-id([bc_education_id])
     business-category-education --- business-category-education-subcategories([Subcategory])
     business-category-education --- business-category-education-subcategories-type([o])
@@ -83,9 +84,9 @@ flowchart LR
     photo --- photo-description([Description])
     photo --- photo-location([Location])
     photo --- photo-like([Like])
-    photo --- photo-type-disjoint((d))
-    photo-type-disjoint --- photo-type-disjoint-subset-business(("⊂"))
-    photo-type-disjoint --- photo-type-disjoint-subset-user(("⊂"))
+    photo === photo-type-disjoint((d))
+    photo-type-disjoint --- photo-type-disjoint-subset-business(("⊃"))
+    photo-type-disjoint --- photo-type-disjoint-subset-user(("⊃"))
     photo-type-disjoint-subset-business --- photo-type-business[Business_Photo]
     photo-type-disjoint-subset-user --- photo-type-user[User_Photo]
     check-in[Check-In] --- check-in-id([check_in_id])
@@ -96,7 +97,7 @@ flowchart LR
     user-friends-user --- user
     user-friends-user --- user-friends-user-friend-id([friend_id])
     user --- user-has-activity{Has}
-    user-has-activity --- activity
+    activity ==> user-has-activity
     user --- user-rates-business{Rates}
     user-rates-business --- business
     user --- user-activity-wall([Activity Wall])
@@ -104,25 +105,27 @@ flowchart LR
     user-checks-in-business --- business
     user --- user-follows-activity{Follows}
     user-follows-activity --- activity
+    business --- business-has-business-category{Has}
+    business-category ==> business-has-business-category
     review ==> review-belongs-business{Belongs}
     review-belongs-business --- business
-    photo-type-business --- photo-type-business-belongs-business{Belongs}
+    photo-type-business ==> photo-type-business-belongs-business{Belongs}
     photo-type-business-belongs-business --- business
-    photo-type-user --- photo-type-user-belongs-user{Belongs}
+    photo-type-user ==> photo-type-user-belongs-user{Belongs}
     photo-type-user-belongs-user --- user
-    check-in --- check-in-belongs-business{Belongs}
+    check-in ==> check-in-belongs-business{Belongs}
     check-in-belongs-business --- business
     classDef strong-entity-primary-key text-decoration: underline, text-decoration-style: solid, text-decoration-thickness: 4px
     class user-id,business-id strong-entity-primary-key
-    classDef weak-entity stroke-width: 7px
-    class review weak-entity
+    classDef weak-entity stroke-width: 7px, stroke: red
+    class review,photo-type-user,photo-type-business,check-in,activity,business-category weak-entity
     classDef weak-entity-primary-key text-decoration: underline, text-decoration-style: dotted, text-decoration-thickness: 4px
-    class user-type-friend-id,review-id,business-category-fitness-id,business-category-education-id,photo-id weak-entity-primary-key
-    classDef identifying-relationship stroke-width: 7px
-    class review-belongs-business identifying-relationship
+    class user-type-friend-id,review-id,business-category-id,photo-id,activity-id,check-in-id weak-entity-primary-key
+    classDef identifying-relationship stroke-width: 7px, stroke: red
+    class user-has-activity,review-belongs-business,photo-type-business-belongs-business,photo-type-user-belongs-user,check-in-belongs-business,business-has-business-category identifying-relationship
 %%    Total Participation
-    linkStyle 89 stroke-width: 5px, stroke: red
-    classDef multivalued-attribute stroke-width: 7px
+    linkStyle 47,57,70,83,92,93,95,97,99 stroke-width: 5px, stroke: red
+    classDef multivalued-attribute stroke-width: 7px, stroke: red
     class user-friend,review-vote-user,review-comment,business-operation,business-check-in,photo-like multivalued-attribute
     classDef derived-attribute stroke-dasharray: 3
     class age derived-attribute
