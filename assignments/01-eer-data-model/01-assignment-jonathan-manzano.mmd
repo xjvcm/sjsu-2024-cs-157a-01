@@ -24,9 +24,7 @@ flowchart LR
     user --- user-email([email])
     user --- user-photo([Profile Picture])
     user --- user-friend([Friend])
-    user --- user-type-subset-friend(("⊃"))
-    user-type-subset-friend --- user-type-friend[Friend]
-    user-type-friend --- user-type-friend-id([friend_id])
+    friend[Friend] --- friend-id([friend_id])
     activity[Activity] --- activity-id([activity_id])
     review[Review] --- review-id([review_id])
     review --- review-publish-date([Publish Date])
@@ -59,7 +57,6 @@ flowchart LR
     business-category[Business Category] === business-category-type((d))
     business-category --- business-category-id([business_category_id])
     business-category-type --- business-category-fitness[Fitness & Instruction]
-    business-category-fitness --- business-category-fitness-id([bc_fitness_id])
     business-category-fitness --- business-category-fitness-subcategories([Subcategory])
     business-category-fitness --- business-category-fitness-subcategories-type([o])
     business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-active[Active Live]
@@ -69,7 +66,6 @@ flowchart LR
     business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-pilate[Pilate]
     business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-nutritionist[Nutritionist]
     business-category-type --- business-category-education[Education]
-    business-category-education --- business-category-education-id([bc_education_id])
     business-category-education --- business-category-education-subcategories([Subcategory])
     business-category-education --- business-category-education-subcategories-type([o])
     business-category-education-subcategories-type --- business-category-education-subcategories-type-college[College & University]
@@ -93,9 +89,8 @@ flowchart LR
     check-in --- check-in-info([Info])
     user --- user-complements-user{Complements}
     user-complements-user --- user
-    user --- user-friends-user{Friends}
-    user-friends-user --- user
-    user-friends-user --- user-friends-user-friend-id([friend_id])
+    user --- user-has-friend{Has}
+    friend ==> user-has-friend
     user --- user-has-activity{Has}
     activity ==> user-has-activity
     user --- user-rates-business{Rates}
@@ -124,7 +119,7 @@ flowchart LR
     classDef identifying-relationship stroke-width: 7px, stroke: red
     class user-has-activity,review-belongs-business,photo-type-business-belongs-business,photo-type-user-belongs-user,check-in-belongs-business,business-has-business-category identifying-relationship
 %%    Total Participation
-    linkStyle 47,57,70,83,92,93,95,97,99 stroke-width: 5px, stroke: red
+    linkStyle 40,66,79,88,89,91,93,95 stroke-width: 5px, stroke: red
     classDef multivalued-attribute stroke-width: 7px, stroke: red
     class user-friend,review-vote-user,review-comment,business-operation,business-check-in,photo-like multivalued-attribute
     classDef derived-attribute stroke-dasharray: 3
