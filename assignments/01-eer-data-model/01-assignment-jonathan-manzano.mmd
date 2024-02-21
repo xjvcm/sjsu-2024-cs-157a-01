@@ -14,112 +14,138 @@ format:
 %%   }
 %% }%%
 flowchart LR
-    user[User] --- user-id([user_id])
-    user --- user-first-name([first_name])
-    user --- user-last-name([last_name])
-    user --- user-gender([gender])
-    user --- user-birthdate([birthdate])
-    user --- user-birthplace([birthplace])
-    user --- user-age([age])
-    user --- user-email([email])
-    user --- user-photo([Profile Picture])
-    user --- user-friend([Friend])
-    friend[Friend] --- friend-id([friend_id])
-    activity[Activity] --- activity-id([activity_id])
-    review[Review] --- review-id([review_id])
-    review --- review-publish-date([Publish Date])
-    review --- review-content([Content])
-    review --- review-author([Author])
-    review --- review-num-star(["# of Star"])
-    review --- review-num-vote(["# of Vote"])
-    review --- review-comment([Comment])
-    review --- review-vote([Vote])
-    review-vote --- review-vote-category([Category])
-    review-vote --- review-vote-user([User])
-    business[Business] --- business-id([business_id])
-    business --- business-address([Address])
-    business-address --- business-address-street([Street])
-    business-address --- business-address-state([State])
-    business-address --- business-address-zip([Zip Code])
-    business-address --- business-address-latitude([Latitude])
-    business-address --- business-address-longitude([Longitude])
-    business --- business-num-review(["# of Review"])
-    business --- business-num-star(["# of Star"])
-    business --- business-operation([Operation])
-    business-operation --- business-operation-hour(["Hour(s)"])
-    business-operation-hour --- business-operation-hour-start(["Start"])
-    business-operation-hour --- business-operation-hour-stop(["Stop"])
-    business-operation --- business-operation-day(["Day"])
-    business --- business-parking([Parking])
-    business --- business-ambient([Ambient])
-    business --- business-check-in([Check-In])
-    business --- business-rating([Rating])
-    business-category[Business Category] === business-category-type((d))
-    business-category --- business-category-id([business_category_id])
-    business-category-type --- business-category-fitness[Fitness & Instruction]
-    business-category-fitness --- business-category-fitness-subcategories([Subcategory])
-    business-category-fitness --- business-category-fitness-subcategories-type([o])
-    business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-active[Active Live]
-    business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-gym[Gym]
-    business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-center[Weight Lose Center]
-    business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-trainer[Trainer]
-    business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-pilate[Pilate]
-    business-category-fitness-subcategories-type --- business-category-fitness-subcategories-type-nutritionist[Nutritionist]
-    business-category-type --- business-category-education[Education]
-    business-category-education --- business-category-education-subcategories([Subcategory])
-    business-category-education --- business-category-education-subcategories-type([o])
-    business-category-education-subcategories-type --- business-category-education-subcategories-type-college[College & University]
-    business-category-education-subcategories-type --- business-category-education-subcategories-type-middle-high[Middle School & High School]
-    business-category-education-subcategories-type --- business-category-education-subcategories-type-adult[Adult School]
-    business-category-education-subcategories-type --- business-category-education-subcategories-type-specialty[Specialty School]
-    business-category-education-subcategories-type --- business-category-education-subcategories-type-dance[Dance Studio]
-    business-category-education-subcategories-type --- business-category-education-subcategories-type-preschool[Preschool]
-    business-category-education-subcategories-type --- business-category-education-subcategories-type-child[Child Care & Day Care]
-    photo[Photo] --- photo-id([photo_id])
-    photo --- photo-author([Author])
-    photo --- photo-description([Description])
-    photo --- photo-location([Location])
-    photo --- photo-like([Like])
-    photo === photo-type-disjoint((d))
-    photo-type-disjoint --- photo-type-disjoint-subset-business(("⊃"))
-    photo-type-disjoint --- photo-type-disjoint-subset-user(("⊃"))
-    photo-type-disjoint-subset-business --- photo-type-business[Business_Photo]
-    photo-type-disjoint-subset-user --- photo-type-user[User_Photo]
-    check-in[Check-In] --- check-in-id([check_in_id])
-    check-in --- check-in-info([Info])
-    user --- user-complements-user{Complements}
+    subgraph user-entity
+        user[User] --- user-id([user_id])
+        user --- user-first-name([first_name])
+        user --- user-last-name([last_name])
+        user --- user-gender([gender])
+        user --- user-birthdate([birthdate])
+        user --- user-birthplace([birthplace])
+        user --- user-age([age])
+        user --- user-email([email])
+        user --- user-photo([Profile Picture])
+        user --- user-friend([Friend])
+        user --- user-activity-wall([Activity Wall])
+    end
+
+    subgraph activity-entity
+        activity-id([activity_id]) --- activity[Activity]
+    end
+
+    subgraph friend-entity
+        friend-id([friend_id]) --- friend[Friend]
+    end
+
+    subgraph review-entity
+        review-id([review_id]) --- review[Review]
+        review-publish-date([Publish Date]) --- review
+        review-content([Content]) --- review
+        review-author([Author]) --- review
+        review-num-star(["# of Star"]) --- review
+        review-num-vote(["# of Vote"]) --- review
+        review-comment([Comment]) --- review
+        review-vote([Vote]) --- review
+        review-vote-category([Category]) --- review-vote
+        review-vote-user([User]) --- review-vote
+    end
+
+    subgraph business-entity
+        business[Business] --- business-id([business_id])
+        business --- business-num-review(["# of Review"])
+        business --- business-num-star(["# of Star"])
+        business --- business-operation([Operation])
+        business --- business-parking([Parking])
+        business --- business-ambient([Ambient])
+        business --- business-check-in([Check-In])
+        business --- business-rating([Rating])
+        business --- business-address([Address])
+        business-address --- business-address-street([Street])
+        business-address --- business-address-state([State])
+        business-address --- business-address-zip([Zip Code])
+        business-address --- business-address-latitude([Latitude])
+        business-address --- business-address-longitude([Longitude])
+        business-operation --- business-operation-hour(["Hour(s)"])
+        business-operation-hour --- business-operation-hour-start(["Start"])
+        business-operation-hour --- business-operation-hour-stop(["Stop"])
+        business-operation --- business-operation-day(["Day"])
+    end
+
+    subgraph business-category-entity
+        business-category-id([business_category_id]) --- business-category[Business Category]
+        business-category-fitness-subcategories-type([o]) === business-category-fitness
+        business-category-fitness-subcategories-type-active[Active Live] --- business-category-fitness-subcategories-type
+        business-category-fitness-subcategories-type-gym[Gym] --- business-category-fitness-subcategories-type
+        business-category-fitness-subcategories-type-center[Weight Lose Center] --- business-category-fitness-subcategories-type
+        business-category-fitness-subcategories-type-trainer[Trainer] --- business-category-fitness-subcategories-type
+        business-category-fitness-subcategories-type-pilate[Pilate] --- business-category-fitness-subcategories-type
+        business-category-fitness-subcategories-type-nutritionist[Nutritionist] --- business-category-fitness-subcategories-type
+        business-category === business-category-disjoint((d))
+        business-category-disjoint --- business-category-disjoint-subset-fitness(("⊃"))
+        business-category-disjoint-subset-fitness --- business-category-fitness[Fitness & Instruction]
+        business-category-disjoint --- business-category-disjoint-subset-education(("⊃"))
+        business-category-disjoint-subset-education --- business-category-education[Education]
+        business-category-education-subcategories-type([o]) === business-category-education
+        business-category-education-subcategories-type-college[College & University] --- business-category-education-subcategories-type
+        business-category-education-subcategories-type-middle-high[Middle School & High School] --- business-category-education-subcategories-type
+        business-category-education-subcategories-type-adult[Adult School] --- business-category-education-subcategories-type
+        business-category-education-subcategories-type-specialty[Specialty School] --- business-category-education-subcategories-type
+        business-category-education-subcategories-type-dance[Dance Studio] --- business-category-education-subcategories-type
+        business-category-education-subcategories-type-preschool[Preschool] --- business-category-education-subcategories-type
+        business-category-education-subcategories-type-child[Child Care & Day Care] --- business-category-education-subcategories-type
+    end
+
+    subgraph photo-entity
+        photo-id([photo_id]) --- photo
+        photo-author([Author]) --- photo
+        photo-description([Description]) --- photo
+        photo-location([Location]) --- photo
+        photo-like([Like]) --- photo
+        photo === photo-type-disjoint((d))
+        photo-type-disjoint --- photo-type-disjoint-subset-business(("⊃"))
+        photo-type-disjoint --- photo-type-disjoint-subset-user(("⊃"))
+        photo-type-disjoint-subset-business --- photo-type-business[Business_Photo]
+        photo-type-disjoint-subset-user --- photo-type-user[User_Photo]
+    end
+
+    subgraph check-in-entity
+        check-in-id([check_in_id]) --- check-in[Check-In]
+        check-in-info([Info]) --- check-in
+    end
+
+
+    business-category-fitness ==> business-category-disjoint-is((d))
+    business-category-education ==> business-category-disjoint-is
+    business-category-disjoint-is ==> business-is-business-category{Is}
+    business-is-business-category --- business
+    user-complements-user{Complements} --- user
     user-complements-user --- user
-    user --- user-has-friend{Has}
-    friend ==> user-has-friend
-    user --- user-has-activity{Has}
-    activity ==> user-has-activity
+    friend ==> user-are-friend{Are}
+    user-are-friend --- user
+    activity ==> user-has-activity{Has}
+    user-has-activity --- user
+    activity --- user-follows-activity{Follows}
+    user-follows-activity --- user
+    photo-type-user ==> user-profiles-photo{Profiles}
+    user-profiles-photo --- user
     user --- user-rates-business{Rates}
     user-rates-business --- business
-    user --- user-activity-wall([Activity Wall])
     user --- user-checks-in-business{Checks In}
     user-checks-in-business --- business
-    user --- user-follows-activity{Follows}
-    user-follows-activity --- activity
-    business --- business-has-business-category{Has}
-    business-category ==> business-has-business-category
-    review ==> review-belongs-business{Belongs}
-    review-belongs-business --- business
-    photo-type-business ==> photo-type-business-belongs-business{Belongs}
-    photo-type-business-belongs-business --- business
-    photo-type-user ==> photo-type-user-belongs-user{Belongs}
-    photo-type-user-belongs-user --- user
-    check-in ==> check-in-belongs-business{Belongs}
-    check-in-belongs-business --- business
+    photo-type-business ==> business-displays-photo{Displays}
+    business-displays-photo --- business
+    review ==> business-displays-photo{Has}
+    business --- business-tracks-check-in{Tracks}
+    check-in ==> business-tracks-check-in
     classDef strong-entity-primary-key text-decoration: underline, text-decoration-style: solid, text-decoration-thickness: 4px
     class user-id,business-id strong-entity-primary-key
     classDef weak-entity stroke-width: 7px, stroke: red
-    class review,photo-type-user,photo-type-business,check-in,activity,business-category weak-entity
+    class friend,review,photo-type-user,photo-type-business,check-in,activity,business-category-fitness,business-category-education weak-entity
     classDef weak-entity-primary-key text-decoration: underline, text-decoration-style: dotted, text-decoration-thickness: 4px
-    class user-type-friend-id,review-id,business-category-id,photo-id,activity-id,check-in-id weak-entity-primary-key
+    class friend-id,review-id,business-category-id,photo-id,activity-id,check-in-id weak-entity-primary-key
     classDef identifying-relationship stroke-width: 7px, stroke: red
-    class user-has-activity,review-belongs-business,photo-type-business-belongs-business,photo-type-user-belongs-user,check-in-belongs-business,business-has-business-category identifying-relationship
+    class business-is-business-category,user-are-friend,user-has-activity,user-profiles-photo,business-displays-photo,business-displays-photo,business-tracks-check-in identifying-relationship
 %%    Total Participation
-    linkStyle 40,66,79,88,89,91,93,95 stroke-width: 5px, stroke: red
+    linkStyle 42,49,54,74,75,76,80,82,86,92,94,96 stroke-width: 5px, stroke: red
     classDef multivalued-attribute stroke-width: 7px, stroke: red
     class user-friend,review-vote-user,review-comment,business-operation,business-check-in,photo-like multivalued-attribute
     classDef derived-attribute stroke-dasharray: 3
